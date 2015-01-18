@@ -8,21 +8,43 @@ var app = app || {};
 	// --------------
 
 	// The DOM element for a todo item...
-	app.TodoView = Backbone.View.extend({
+	app.TodoView = Backbone.ElementsView.extend({
 		//... is a list tag.
 		tagName:  'li',
 
 		// Cache the template function for a single item.
 		template: _.template($('#item-template').html()),
 
+		// Place here our CSS classes to avoid their duplication in the code
+		_classes: function () {
+			return {
+				completed: 'completed',
+				hidden: 'hidden',
+				editing: 'editing'
+			};
+		},
+
+		// Place here our selectors to avoid their duplication in the code
+		_selectors: function () {
+			return {
+				toggle: '.toggle',
+				label: 'label',
+				destroy: '.destroy',
+				edit: '.edit'
+			};
+		},
+
 		// The DOM events specific to an item.
-		events: {
-			'click .toggle': 'toggleCompleted',
-			'dblclick label': 'edit',
-			'click .destroy': 'clear',
-			'keypress .edit': 'updateOnEnter',
-			'keydown .edit': 'revertOnEscape',
-			'blur .edit': 'close'
+		events: function () {
+			var events = {};
+			var editSelector = this._selector('edit');
+			events['click ' + this._selector('toggle')] = this.toggleCompleted;
+			events['dblclick ' + this._selector('label')] = this.edit;
+			events['click ' + this._selector('destroy')] = this.clear;
+			events['keypress ' + editSelector] = this.updateOnEnter;
+			events['keydown ' + editSelector] = this.revertOnEscape;
+			events['blur ' + editSelector] = this.close;
+			return events;
 		},
 
 		// The TodoView listens for changes to its model, re-rendering. Since
@@ -49,14 +71,14 @@ var app = app || {};
 			}
 
 			this.$el.html(this.template(this.model.toJSON()));
-			this.$el.toggleClass('completed', this.model.get('completed'));
+			this._toggleClass('completed', this.model.get('completed'));
 			this.toggleVisible();
-			this.$input = this.$('.edit');
+			this._dropElemCache('edit');
 			return this;
 		},
 
 		toggleVisible: function () {
-			this.$el.toggleClass('hidden', this.isHidden());
+			this._toggleClass('hidden', this.isHidden());
 		},
 
 		isHidden: function () {
@@ -72,20 +94,20 @@ var app = app || {};
 
 		// Switch this view into `"editing"` mode, displaying the input field.
 		edit: function () {
-			this.$el.addClass('editing');
-			this.$input.focus();
+			this._addClass('editing');
+			this._elem('edit').focus();
 		},
 
 		// Close the `"editing"` mode, saving changes to the todo.
 		close: function () {
-			var value = this.$input.val();
+			var value = this._elem('edit').val();
 			var trimmedValue = value.trim();
 
 			// We don't want to handle blur events from an item that is no
 			// longer being edited. Relying on the CSS class here has the
 			// benefit of us not having to maintain state in the DOM and the
 			// JavaScript logic.
-			if (!this.$el.hasClass('editing')) {
+			if (!this._hasClass('editing')) {
 				return;
 			}
 
@@ -104,7 +126,7 @@ var app = app || {};
 				this.clear();
 			}
 
-			this.$el.removeClass('editing');
+			this._removeClass('editing');
 		},
 
 		// If you hit `enter`, we're through editing the item.
@@ -118,9 +140,9 @@ var app = app || {};
 		// the `editing` state.
 		revertOnEscape: function (e) {
 			if (e.which === ESC_KEY) {
-				this.$el.removeClass('editing');
+				this._removeClass('editing');
 				// Also reset the hidden input back to the original value.
-				this.$input.val(this.model.get('title'));
+				this._elem('edit').val(this.model.get('title'));
 			}
 		},
 
