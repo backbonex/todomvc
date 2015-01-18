@@ -259,6 +259,9 @@
 		}, {
 			"name": "TypeScript & Backbone.js",
 			"url": "examples/typescript-backbone"
+		}, {
+			"name": "Backbone.View.Elements & Backbone.js",
+			"url": "examples/backbone_view-elements"
 		}],
 		"link_groups": [{
 			"heading": "Official Resources",
