@@ -1,8 +1,8 @@
-# Backbone.js TodoMVC Example
+# Backbone.View.Elements TodoMVC Example
 
-> Backbone.js gives structure to web applications by providing models with key-value binding and custom events, collections with a rich API of enumerable functions, views with declarative event handling, and connects it all to your existing API over a RESTful JSON interface.
+> Backbone.View extension for convenient work with elements, CSS classes and selectors. It helps you to avoid duplication of CSS classes and selectors inside your view and caches sub elements of it  
 
-> _[Backbone.js - backbonejs.org](http://backbonejs.org)_
+> _[Backbone.View.Elements - https://github.com/backbonex/backbone.view.elements](https://github.com/backbonex/backbone.view.elements)_
 
 
 ## Learning Backbone.js

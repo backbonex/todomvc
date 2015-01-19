@@ -301,6 +301,28 @@
 			}]
 		}]
 	},
+  	"backbone_view-elements": {
+	  	"name": "Backbone.View.Elements",
+	  	"description": "Backbone.View extension for convenient work with elements, css classes and selectors",
+	  	"homepage": "https://github.com/backbonex/backbone.view.elements",
+	  	"examples": [{
+			"name": "Backbone.View.Elements",
+			"url": "examples/backbone_view-elements"
+		}, {
+			"name": "Backbone.View.Elements & RequireJS",
+			"url": "examples/backbone_view-elements_require"
+		}],
+	  	"link_groups": [{
+		  	"heading": "Official Resources",
+		  	"links": [{
+				"name": "Project on GitHub",
+			  	"url": "https://github.com/backbonex/backbone.view.elements"
+			}, {
+			  	"name": "API reference",
+			  	"url": "https://github.com/backbonex/backbone.view.elements#protected-api"
+			}]
+		}]
+	},
 	"ampersand": {
 		"name": "Ampersand.js",
 		"description": "A highly modular, loosely coupled, non-frameworky framework for building advanced JavaScript apps.",
