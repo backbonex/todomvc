@@ -4,24 +4,47 @@ define([
 	'underscore',
 	'backbone',
 	'text!templates/todos.html',
-	'common'
-], function ($, _, Backbone, todosTemplate, Common) {
+	'common',
+	'ElementsView'
+], function ($, _, Backbone, todosTemplate, Common, ElementsView) {
 	'use strict';
 
-	var TodoView = Backbone.View.extend({
+	var TodoView = ElementsView.extend({
 
 		tagName:  'li',
 
 		template: _.template(todosTemplate),
 
+		// Place here our CSS classes to avoid their duplication in the code
+		_classes: function () {
+			return {
+				completed: 'completed',
+				hidden: 'hidden',
+				editing: 'editing'
+			};
+		},
+
+		// Place here our selectors to avoid their duplication in the code
+		_selectors: function () {
+			return {
+				toggle: '.toggle',
+				label: 'label',
+				destroy: '.destroy',
+				edit: '.edit'
+			};
+		},
+
 		// The DOM events specific to an item.
-		events: {
-			'click .toggle':	'toggleCompleted',
-			'dblclick label':	'edit',
-			'click .destroy':	'clear',
-			'keypress .edit':	'updateOnEnter',
-			'keydown .edit':	'revertOnEscape',
-			'blur .edit':		'close'
+		events: function () {
+			var events = {};
+			var editSelector = this._selector('edit');
+			events['click ' + this._selector('toggle')] = this.toggleCompleted;
+			events['dblclick ' + this._selector('label')] = this.edit;
+			events['click ' + this._selector('destroy')] = this.clear;
+			events['keypress ' + editSelector] = this.updateOnEnter;
+			events['keydown ' + editSelector] = this.revertOnEscape;
+			events['blur ' + editSelector] = this.close;
+			return events;
 		},
 
 		// The TodoView listens for changes to its model, re-rendering. Since there's
@@ -36,15 +59,15 @@ define([
 		// Re-render the titles of the todo item.
 		render: function () {
 			this.$el.html(this.template(this.model.toJSON()));
-			this.$el.toggleClass('completed', this.model.get('completed'));
+			this._toggleClass('completed', this.model.get('completed'));
 
 			this.toggleVisible();
-			this.$input = this.$('.edit');
+			this._dropElemCache('edit');
 			return this;
 		},
 
 		toggleVisible: function () {
-			this.$el.toggleClass('hidden',  this.isHidden());
+			this._toggleClass('hidden', this.isHidden());
 		},
 
 		isHidden: function () {
@@ -62,13 +85,13 @@ define([
 
 		// Switch this view into `"editing"` mode, displaying the input field.
 		edit: function () {
-			this.$el.addClass('editing');
-			this.$input.focus();
+			this._addClass('editing');
+			this._elem('edit').focus();
 		},
 
 		// Close the `"editing"` mode, saving changes to the todo.
 		close: function () {
-			var value = this.$input.val();
+			var value = this._elem('edit').val();
 			var trimmedValue = value.trim();
 
 			if (trimmedValue) {
@@ -84,7 +107,7 @@ define([
 				this.clear();
 			}
 
-			this.$el.removeClass('editing');
+			this._removeClass('editing');
 		},
 
 		// If you hit `enter`, we're through editing the item.
@@ -98,9 +121,9 @@ define([
 		// the `editing` state.
 		revertOnEscape: function (e) {
 			if (e.which === Common.ESCAPE_KEY) {
-				this.$el.removeClass('editing');
+				this._removeClass('editing');
 				// Also reset the hidden input back to the original value.
-				this.$input.val(this.model.get('title'));
+				this._elem('edit').val(this.model.get('title'));
 			}
 		},
 

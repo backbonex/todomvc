@@ -7,6 +7,6 @@
     "jquery": "~2.1.0",
     "todomvc-common": "~0.3.0",
     "backbone.localStorage": "~1.1.0",
-    "backbone.view.elements": "~1.0.0"
+    "backbone.view.elements": "~1.0.1"
   }
 }

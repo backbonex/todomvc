@@ -260,8 +260,11 @@
 			"name": "TypeScript & Backbone.js",
 			"url": "examples/typescript-backbone"
 		}, {
-			"name": "Backbone.View.Elements & Backbone.js",
+			"name": "Backbone.View.Elements",
 			"url": "examples/backbone_view-elements"
+		}, {
+			"name": "Backbone.View.Elements & RequireJS",
+			"url": "examples/backbone_view-elements_require"
 		}],
 		"link_groups": [{
 			"heading": "Official Resources",
